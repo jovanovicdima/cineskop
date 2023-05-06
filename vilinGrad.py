@@ -3,63 +3,74 @@ from bs4 import BeautifulSoup
 
 
 class Movie:
-    def __init__(self, age):
-        self.age = age
-        self.originalName = ""
+    def __init__(self, title):
+        self.title = title
+        self.originalTitle = ""
+        self.runningTime = ""
+        self.releaseDate = ""
+        self.countryOfOrigin = ""
+        self.director = ""
+        self.cast = []
 
-
-
-
+# TODO - Create URL generator for target day
 url = "http://vilingrad.rs/na-repertoaru?ScreeningDate=2023-05-05"
 
-html = requests.get(url)
-s = BeautifulSoup(html.content, "html.parser")
-results = s.find(class_="projection-page content-item")
+request = requests.get(url)
+html = BeautifulSoup(request.content, "html.parser")
+results = html.find(class_="projection-page content-item")
 
-imena = []
-# ovo su imena fimlova po naski
-x = s.find_all("h1")
-for item in x:
-    imena.append(item.text)
-imena.pop(0)
-imena.pop(0)
 
-originalnaImena = []
-# ovo su originalna imena filmova
-names = results.find_all('p', "text-field text-field-originalname")
-for name in names:
-    originalnaImena.append(name.findNext("span", "value").text[1:])
+movies = []
 
-duzinaTrajanja = []
-# ovo su duzine trajanja filmova
-duration = results.find_all('p', "numeric-field numeric-field-lengthminutes")
-for item in duration:
-    duzinaTrajanja.append(item.findNext("span", "value").text)
+# movie titles - creating array of Movie objects
+titles = html.find_all("h1")
+for runningTime in titles:
+    movies.append(Movie(runningTime.text))
 
-releaseDate = []
-ostalo = results.find_all(class_="numeric-field numeric-field-lengthminutes")
-for item in ostalo:
-    releaseDate.append(item.findNext(class_="value").findNext(class_="value").text[1:-1])
+# first two items are not movie titles
+movies.pop(0)
+movies.pop(0)
 
-countryOfOrigin = []
-for item in ostalo:
-    countryOfOrigin.append(item.findNext(class_="value").findNext(class_="value").findNext(class_="value").text[1:])
+# original titles
+originalTitles = results.find_all('p', "text-field text-field-originalname")
+i = 0
+for originalTitle in originalTitles:
+    movies[i].originalTitle = originalTitle.findNext("span", "value").text[1:]
+    i = i + 1
 
-directors = []
-for item in ostalo:
-    directors.append(
-        item.findNext(class_="value").findNext(class_="value").findNext(class_="value").findNext(class_="value").text[
-        1:])
+# running time
+runningTimes = results.find_all('p', "numeric-field numeric-field-lengthminutes")
+i = 0
+for runningTime in runningTimes:
+    movies[i].runningTime = runningTime.findNext("span", "value").text
+    i = i + 1
 
-actors = []
-for item in ostalo:
-    actors.append(item.findNext(class_="value").findNext(class_="value").findNext(class_="value").findNext(
-        class_="value").findNext(class_="value").text[1:])
+others = results.find_all(class_="numeric-field numeric-field-lengthminutes")
+
+#release date
+i = 0
+for runningTime in others:
+    movies[i].releaseDate = runningTime.findNext(class_="value").findNext(class_="value").text[1:-1]
+    i = i + 1
+
+# country of origin
+i = 0
+for runningTime in others:
+    movies[i].countryOfOrigin = runningTime.findNext(class_="value").findNext(class_="value").findNext(class_="value").text[1:]
+    i = i + 1
+
+# director
+i = 0
+for runningTime in others:
+    movies[i].director = runningTime.findNext(class_="value").findNext(class_="value").findNext(class_="value").findNext(class_="value").text[1:]
+    i = i + 1
+
+# movie cast
+i = 0
+for runningTime in others:
+    movies[i].cast = runningTime.findNext(class_="value").findNext(class_="value").findNext(class_="value").findNext(class_="value").findNext(class_="value").text[1:]
+    i = i + 1
 
 # stampanje
-for item in imena:
-    print(item)
-for item in originalnaImena:
-    print(item)
-for item in duzinaTrajanja:
-    print(item)
+for runningTime in movies:
+    print(runningTime.title + " | " + runningTime.originalTitle + " | " + runningTime.runningTime + " min | year " + runningTime.releaseDate + " | " + runningTime.countryOfOrigin + " | " + runningTime.director + " | " + runningTime.cast)
