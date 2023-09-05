@@ -1,70 +1,77 @@
 import requests
-from movie import Movie
+from movie import Movie, TicketInfo
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 
-def getProjectionTime(movieURL):
+def getMovie(movieURL):
     request = requests.get(movieURL)
     html = BeautifulSoup(request.content, "html.parser")
-    dates = html.select('time[class*=date-time-field-time]')
-    times = []
-    for item in dates:
-        date = datetime.strptime(item['datetime'][:10], "%Y-%m-%d").date() # converting parsed string to date format
-        time = datetime.strptime(item['datetime'][11:] + ' ' + item['datetime'][10] + 'M', "%I:%M %p").time() # converting parsed string to time format
-        times.append(datetime.combine(date, time))
-    return times
+    # item = html.find("div", class_ = "col-md-4")
+    item = html.find("div", class_ = "row")
+
+    movie = Movie(item.findNext("h1").text, movieURL)
+    item = item.findNext("li") # original title
+    movie.originalTitle = item.text[item.text.find(":") + 1:].strip() 
+    item = item.findNext("li") # running time
+    movie.runningTime = item.text[item.text.find(":") + 1:].strip()
+    item = item.findNext("li") 
+    item = item.findNext("li") # country of origin
+    movie.countryOfOrigin = item.text[item.text.find(":") + 1:].strip()
+    item = item.findNext("li") # director
+    movie.director = item.text[item.text.find(":") + 1:].strip()
+    item = item.findNext("li") # cast
+    movie.cast = item.text[item.text.find(":") + 1:].strip()
+    item = item.findNext("li") # release date
+    movie.releaseDate = item.text[item.text.find(":") + 1:].strip()
+    item = item.findNext("p")
+    movie.genre = item.text[item.text.find(":") + 1:].strip()
+
+    item = html.find("span", class_ = "filmscreeningsTime")
+    while item != None:
+        try:
+            ticketLink = "http://vilingrad.rs" + item.find("a")["href"]
+            
+        except:
+            item = item.findNext("span", class_ = "filmscreeningsTime")
+            continue
+
+        projectionTime = item.find("time")
+        date = datetime.strptime(projectionTime['datetime'][:10], "%Y-%m-%d").date() # converting parsed string to date format
+        time = datetime.strptime(projectionTime['datetime'][11:] + projectionTime['datetime'][10] + 'M', "%I:%M%p").time() # converting parsed string to time format
+        projectionTime = datetime.combine(date, time)
+
+        projectionType = item.find("span", class_ = "value").text
+
+        status = 2
+        auditorium = "unknown"
+        try:
+            auditoriumRequest = BeautifulSoup(requests.get("http://test.8bit.rs/Projection/FilmProjectionHall?projectionID=" + ticketLink[ticketLink.find("=") + 1:]).content, "html.parser")
+            auditorium = auditoriumRequest.find("h3", class_ = "projectionHall").text
+        except:
+            status = 5 # no tickets left
         
-url = "http://vilingrad.rs/na-repertoaru?ScreeningDate=" + datetime.today().strftime("%Y-%m-%d")
-request = requests.get(url)
-html = BeautifulSoup(request.content, "html.parser")
-results = html.find(class_="projection-page content-item")
+        item = item.findNext("span", class_ = "filmscreeningsTime")
 
-movies = []
+        movie.tickets.append(TicketInfo(projectionTime, projectionType, auditorium, status, ticketLink))
 
-# movie titles - creating array of Movie objects
-titles = html.find_all("h1")
-for title in titles:
-    movies.append(Movie(title.text, title.findNext('a', href = True)['href']))
+    return movie
+    
+def vilinGrad():
+    movies = []
 
-# first two items are not movie titles
-movies.pop(0)
-movies.pop(0)
+    for i in range(7):
+        url = "http://vilingrad.rs/na-repertoaru?ScreeningDate=" + (datetime.now() + timedelta(i)).strftime("%Y-%m-%d")
+        request = requests.get(url)
+        html = BeautifulSoup(request.content, "html.parser")
+        results = html.find(class_="projection-page content-item")
 
-# original titles
-originalTitles = results.find_all('p', "text-field text-field-originalname")
-for i, originalTitle in enumerate(originalTitles):
-    movies[i].originalTitle = originalTitle.findNext("span", "value").text[1:]
+        item = results.find("h1")
+        while item != None:
+            item = item.findNext("a")
+            if(not(any("http://vilingrad.rs/" + item["href"] == movie.href for movie in movies))):
+                    if(item["href"] == "/o-bioskopu"): return movies
+                    movies.append(getMovie("http://vilingrad.rs/" + item["href"]))
+                    print(item["href"])
+            item = item.findNext("h1")
 
-# running time
-runningTimes = results.find_all('p', "numeric-field numeric-field-lengthminutes")
-for i, runningTime in enumerate(runningTimes):
-    movies[i].runningTime = runningTime.findNext("span", "value").text
-
-others = results.find_all(class_="numeric-field numeric-field-lengthminutes")
-
-#release date
-for i, releaseDates in enumerate(others):
-   movies[i].releaseDate = releaseDates.findNext(class_="value").findNext(class_="value").text[1:-1]
-
-# country of origin
-for i, countryOfOrigin in enumerate(others):
-    movies[i].countryOfOrigin = countryOfOrigin.findNext(class_="value").findNext(class_="value").findNext(class_="value").text[1:]
-
-# director
-for i, directors in enumerate(others):
-    movies[i].director = directors.findNext(class_="value").findNext(class_="value").findNext(class_="value").findNext(class_="value").text[1:]
-
-# movie cast
-for i, movieCast in enumerate(others):
-    movies[i].cast = movieCast.findNext(class_="value").findNext(class_="value").findNext(class_="value").findNext(class_="value").findNext(class_="value").text[1:]
-
-# movie projection 
-for item in movies:
-    item.projectionTimes = getProjectionTime("http://vilingrad.rs/" + item.href)
-
-# printing
-for item in movies:
-    print(item.title + " | " + item.originalTitle + " | " + item.runningTime + " min | year " + item.releaseDate + " | " + item.countryOfOrigin + " | " + item.director + " | " + item.cast)
-    # print(item.title + " | " + item.href)
-    for time in item.projectionTimes:
-        print(time)
+    return movies
