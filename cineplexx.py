@@ -12,12 +12,12 @@ def getMovie(movieURL, pageInstance):
     movie = Movie(html.find("h1").findNext("h1").text, pageInstance.url) # movie name
     html = item = html.find("tr") # original name
     movie.originalTitle = item.findNext("td").findNext("td").text
-    item = item.findNext("tr") # release date
-    movie.releaseDate = item.findNext("td").findNext("td").text + "."
-    item = item.findNext("tr") # running time
+    item = item.findNext("tr").findNext("tr") # running time
     if item.findNext("td").text == "Dužina trajanja filma:": # some movies dont have running time info
         movie.runningTime = item.findNext("td").findNext("td").text[:-4]
         item = item.findNext("tr") # country of origin
+    else:
+        movie.runningTime = 0
     movie.countryOfOrigin = item.findNext("td").findNext("td").text[:-5]
     item = item.findNext("tr") # genre
     movie.genre = item.findNext("td").findNext("td").text
@@ -44,15 +44,15 @@ def getMovie(movieURL, pageInstance):
             ticketStatus = 1
         elif "red-font" in ticketStatus: # only purchasable in person
             ticketStatus = 3
-        elif "grey-font" in ticketStatus: # reservations not available
-            ticketStatus = 4
-        else:
-            ticketStatus = -1 # error
+        else: # reservations not available
+            ticketStatus = 4 
         
 
         ticketLink = item.find("a")["href"]
         auditorium = item.find("p", class_ = "room-desc").text.strip()
         projectionType = item.find("p", class_ = "mode-desc").text.strip()
+        if projectionType == "":
+            projectionType = "Digital 2D"
 
         movie.tickets.append(TicketInfo(projectionTime, projectionType, auditorium, ticketStatus, ticketLink))
 
@@ -70,7 +70,7 @@ def cineplexx():
             page.goto("https://www.cineplexx.rs/filmovi/repertoar/")
             page.locator('select.isset[name=centerId]').select_option("615")
             try:
-                page.locator('select.isset[name="date"]').select_option(index=i, timeout=300) # timeout is set to 300ms so ticketStatus can be determined
+                page.locator('select.isset[name="date"]').select_option(index=i, timeout=300) # timeout is set to >=300ms so ticketStatus can be determined
             except:
                 continue
             request = page.inner_html("div.container", timeout=5000)

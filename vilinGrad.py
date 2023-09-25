@@ -21,15 +21,19 @@ def getMovie(movieURL):
     movie.director = item.text[item.text.find(":") + 1:].strip()
     item = item.findNext("li") # cast
     movie.cast = item.text[item.text.find(":") + 1:].strip()
-    item = item.findNext("li") # release date
-    movie.releaseDate = item.text[item.text.find(":") + 1:].strip()
     item = item.findNext("p")
     movie.genre = item.text[item.text.find(":") + 1:].strip()
 
     item = html.find("span", class_ = "filmscreeningsTime")
     while item != None:
+        status = 4
         try:
-            ticketLink = "http://vilingrad.rs" + item.find("a")["href"]
+            ticketLink = item.find("a")["href"]
+            if ticketLink == "#":
+                status = 3
+            else:
+                status = 2
+            ticketLink = "http://vilingrad.rs" + ticketLink
             
         except:
             item = item.findNext("span", class_ = "filmscreeningsTime")
@@ -42,13 +46,12 @@ def getMovie(movieURL):
 
         projectionType = item.find("span", class_ = "value").text
 
-        status = 2
         auditorium = "unknown"
         try:
             auditoriumRequest = BeautifulSoup(requests.get("http://test.8bit.rs/Projection/FilmProjectionHall?projectionID=" + ticketLink[ticketLink.find("=") + 1:]).content, "html.parser")
             auditorium = auditoriumRequest.find("h3", class_ = "projectionHall").text
         except:
-            status = 5 # no tickets left
+            status = 4 # no tickets left
         
         item = item.findNext("span", class_ = "filmscreeningsTime")
 
