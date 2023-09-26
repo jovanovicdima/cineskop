@@ -3,10 +3,9 @@ class Movie:
         self.title = title
         self.originalTitle = ""
         self.runningTime = ""
-        self.releaseDate = ""
         self.countryOfOrigin = ""
         self.director = ""
-        self.cast = []
+        self.cast = ""
         self.href = href
         self.genre = ""
         self.tickets = []
@@ -23,4 +22,3 @@ class TicketInfo:
         # status 2 - not purchasable online, reservations availabe
         # status 3 - only purchasable in person
         # status 4 - reservations not available
-        # status 5 - no tickets left
