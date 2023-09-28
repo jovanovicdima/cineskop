@@ -40,10 +40,10 @@ def writeMoviesToDatabase(movies, cinemaName):
 
 try:
     connection = psycopg.connect(
-        host = "",
-        dbname = "",
-        user = "",
-        password = "",
+        host = "localhost",
+        dbname = "dima",
+        user = "dima",
+        password = "dima",
         port = "5432")
     
     cursor = connection.cursor()
