@@ -26,12 +26,10 @@ def getMovie(movieURL):
 
     item = html.find("span", class_ = "filmscreeningsTime")
     while item != None:
-        status = 4
+        status = 3
         try:
             ticketLink = item.find("a")["href"]
-            if ticketLink == "#":
-                status = 3
-            else:
+            if ticketLink != "#":
                 status = 2
             ticketLink = "http://vilingrad.rs" + ticketLink
             
