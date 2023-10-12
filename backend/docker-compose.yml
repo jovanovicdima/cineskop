@@ -1,0 +1,26 @@
+version: '3.5'
+
+services:
+  database:
+    image: postgres
+    environment:
+      POSTGRES_USER: dima
+      POSTGRES_PASSWORD: dima
+      PGDATA: /data/postgres
+    volumes:
+       - ./database:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+  
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: dima@dima.dima
+      PGADMIN_DEFAULT_PASSWORD: dima
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+       - ./pgadmin:/var/lib/pgadmin
+    ports:
+      - "8080:80"
+    restart: unless-stopped
