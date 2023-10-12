@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS projections;
+
+DROP TABLE IF EXISTS movielinks;
+
+DROP TABLE IF EXISTS movies;
+
+DROP TABLE IF EXISTS cinemas;
