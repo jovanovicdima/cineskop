@@ -1,4 +1,5 @@
 import requests
+import os
 from movie import Movie, TicketInfo
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -59,7 +60,10 @@ def getMovie(movieURL):
     
 def vilinGrad():
     movies = []
-
+    baseLink = "http://vilingrad.rs/"
+    imgPath = "../frontend/images"
+    if not os.path.exists("../frontend/images"):
+        os.makedirs("../frontend/images")
     for i in range(7):
         url = "http://vilingrad.rs/na-repertoaru?ScreeningDate=" + (datetime.now() + timedelta(i)).strftime("%Y-%m-%d")
         request = requests.get(url)
@@ -69,10 +73,16 @@ def vilinGrad():
         item = results.find("h1")
         while item != None:
             item = item.findNext("a")
-            if(not(any("http://vilingrad.rs/" + item["href"] == movie.href for movie in movies))):
+            if(not(any(baseLink + item["href"] == movie.href for movie in movies))):
                     if(item["href"] == "/o-bioskopu"): return movies
-                    movies.append(getMovie("http://vilingrad.rs/" + item["href"]))
+                    movies.append(getMovie(baseLink + item["href"]))
                     print(item["href"])
+                    item = item.findNext("img")
+                    imgName = os.path.basename(movies[-1].originalTitle) + ".jpeg"
+                    imgData = requests.get(baseLink + item['src']).content
+                    with open(os.path.join("..", "frontend", "images", imgName), 'wb') as f:
+                        f.write(imgData)
+                        print(f"Image {imgName} downloaded successfully.")
             item = item.findNext("h1")
 
     return movies

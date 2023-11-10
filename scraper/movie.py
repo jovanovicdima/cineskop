@@ -9,6 +9,7 @@ class Movie:
         self.href = href
         self.genre = ""
         self.tickets = []
+        self.trailerLink = ""
 
 class TicketInfo:
     def __init__(self, projectionTime, projectionType, auditorium, status, ticketLink):

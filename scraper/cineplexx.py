@@ -1,3 +1,5 @@
+import os
+import requests
 from movie import Movie, TicketInfo
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
@@ -9,24 +11,30 @@ def getMovie(movieURL, pageInstance):
     request = pageInstance.inner_html("body", timeout=5000)
     html = BeautifulSoup(request, 'html.parser')
 
-    movie = Movie(html.find("h1").findNext("h1").text, pageInstance.url) # movie name
-    html = item = html.find("tr") # original name
-    movie.originalTitle = item.findNext("td").findNext("td").text
+    movie = Movie(html.find("h1").findNext("h1").text.strip(), pageInstance.url) # movie name
+    item = html.find("tr") # original name
+    movie.originalTitle = item.findNext("td").findNext("td").text.strip()
     item = item.findNext("tr").findNext("tr") # running time
     if item.findNext("td").text == "Dužina trajanja filma:": # some movies dont have running time info
-        movie.runningTime = item.findNext("td").findNext("td").text[:-4]
+        movie.runningTime = item.findNext("td").findNext("td").text[:-4].strip()
         item = item.findNext("tr") # country of origin
     else:
         movie.runningTime = 0
-    movie.countryOfOrigin = item.findNext("td").findNext("td").text[:-5]
+    movie.countryOfOrigin = item.findNext("td").findNext("td").text[:-5].strip()
     item = item.findNext("tr") # genre
-    movie.genre = item.findNext("td").findNext("td").text
+    movie.genre = item.findNext("td").findNext("td").text.strip()
     item = item.findNext("tr") # cast
-    movie.cast = item.findNext("td").findNext("td").text
+    movie.cast = item.findNext("td").findNext("td").text.strip()
     item = item.findNext("tr") # director
-    movie.director = item.findNext("td").findNext("td").text
+    movie.director = item.findNext("td").findNext("td").text.strip()
 
-    item = html.findNext("div", class_ = "span9")
+    imgName = os.path.basename(movie.originalTitle) + ".jpeg"
+    imgData = requests.get("https://www.cineplexx.rs" + html.find("a", class_ = "pull-left").findNext("img")["src"]).content
+    with open(os.path.join("..", "frontend", "images", imgName), 'wb') as f:
+        f.write(imgData)
+        print(f"Image {imgName} downloaded successfully.")
+
+    item = item.findNext("div", class_ = "span9")
     if item == None: return [] # no projections
 
     # ticket info    
@@ -62,6 +70,8 @@ def getMovie(movieURL, pageInstance):
 
 def cineplexx():
     movies = []
+    if not os.path.exists("../frontend/images"):
+        os.makedirs("../frontend/images")
     with sync_playwright() as playwright:
         browser = playwright.firefox.launch(headless=True, slow_mo=300)
         page = browser.new_page()

@@ -7,7 +7,7 @@ def writeMoviesToDatabase(movies, cinemaName):
     for item in movies:
         try:
             # movies table
-            query = 'INSERT INTO movies (title, originaltitle, runningtime, genre, countryoforigin, director, "cast") VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT (originaltitle) DO UPDATE SET (runningtime) = ROW(EXCLUDED.runningtime)'
+            query = "INSERT INTO movies (title, originaltitle, runningtime, genre, countryoforigin, director, \"cast\") VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT (originaltitle) DO UPDATE SET (runningtime) = ROW(EXCLUDED.runningtime)"
             params = (item.title, item.originalTitle, int(item.runningTime), item.genre, item.countryOfOrigin, item.director, item.cast)
             cursor.execute(query, params)
             connection.commit()
@@ -18,6 +18,7 @@ def writeMoviesToDatabase(movies, cinemaName):
         try:
             # movielinks table
             query = "INSERT INTO movielinks (movieid, cinemaid, link) VALUES (%s, %s, %s) ON CONFLICT (movieid, cinemaid) DO NOTHING"
+            item.originalTitle = item.originalTitle.replace("'", "''")
             movieID = cursor.execute(f"SELECT id FROM movies WHERE originaltitle = '{item.originalTitle}'").fetchone()[0]
             cinemaID = cursor.execute(f"SELECT id FROM cinemas WHERE name = '{cinemaName}'").fetchone()[0]
             params = (movieID, cinemaID, item.href)
@@ -49,9 +50,9 @@ try:
     cursor = connection.cursor()
     print('Connected to the database. PostgreSQL database version: ' + str(cursor.execute("SELECT version()").fetchone()))
 
-    writeMoviesToDatabase(cineplexx(), "Cineplexx")
     writeMoviesToDatabase(cineGrand(), "CineGrand")
     writeMoviesToDatabase(vilinGrad(), "Vilingrad")
+    writeMoviesToDatabase(cineplexx(), "Cineplexx")
 
 except Exception as error:
     print(error)
