@@ -60,7 +60,7 @@ def getMovie(movieURL):
     
 def vilinGrad():
     movies = []
-    baseLink = "http://vilingrad.rs/"
+    baseLink = "http://vilingrad.rs"
     imgPath = "../frontend/images"
     if not os.path.exists(imgPath):
         os.makedirs(imgPath)
