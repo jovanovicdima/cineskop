@@ -76,10 +76,13 @@ def cineGrand():
                     print(item["href"])
                     item = item.findNext("img")
                     imgName = os.path.basename(movies[-1].originalTitle) + ".jpeg"
-                    imgData = requests.get(baseLink + item['src']).content
-                    with open(os.path.join("..", "frontend", "images", imgName), 'wb') as f:
-                        f.write(imgData)
-                        print(f"Image {imgName} downloaded successfully.")
+                    if os.path.exists(f"{imgPath}/{imgName}"):
+                        print(f"Image {imgName} already downloaded.")
+                    else:
+                        imgData = requests.get(baseLink + item['src']).content
+                        with open(os.path.join("..", "frontend", "images", imgName), 'wb') as f:
+                            f.write(imgData)
+                            print(f"Image {imgName} downloaded successfully.")
             item = item.findNext("h1")
 
     return movies

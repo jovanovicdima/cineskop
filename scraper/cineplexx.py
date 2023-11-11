@@ -29,10 +29,13 @@ def getMovie(movieURL, pageInstance):
     movie.director = item.findNext("td").findNext("td").text.strip()
 
     imgName = os.path.basename(movie.originalTitle) + ".jpeg"
-    imgData = requests.get("https://www.cineplexx.rs" + html.find("a", class_ = "pull-left").findNext("img")["src"]).content
-    with open(os.path.join("..", "frontend", "images", imgName), 'wb') as f:
-        f.write(imgData)
-        print(f"Image {imgName} downloaded successfully.")
+    if os.path.exists(f"../frontend/images/{imgName}"):
+        print(f"Image {imgName} already downloaded.")
+    else:
+        imgData = requests.get("https://www.cineplexx.rs" + html.find("a", class_ = "pull-left").findNext("img")["src"]).content
+        with open(os.path.join("..", "frontend", "images", imgName), 'wb') as f:
+            f.write(imgData)
+            print(f"Image {imgName} downloaded successfully.")
 
     item = item.findNext("div", class_ = "span9")
     if item == None: return [] # no projections

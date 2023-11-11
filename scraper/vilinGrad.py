@@ -62,8 +62,8 @@ def vilinGrad():
     movies = []
     baseLink = "http://vilingrad.rs/"
     imgPath = "../frontend/images"
-    if not os.path.exists("../frontend/images"):
-        os.makedirs("../frontend/images")
+    if not os.path.exists(imgPath):
+        os.makedirs(imgPath)
     for i in range(7):
         url = "http://vilingrad.rs/na-repertoaru?ScreeningDate=" + (datetime.now() + timedelta(i)).strftime("%Y-%m-%d")
         request = requests.get(url)
@@ -79,10 +79,13 @@ def vilinGrad():
                     print(item["href"])
                     item = item.findNext("img")
                     imgName = os.path.basename(movies[-1].originalTitle) + ".jpeg"
-                    imgData = requests.get(baseLink + item['src']).content
-                    with open(os.path.join("..", "frontend", "images", imgName), 'wb') as f:
-                        f.write(imgData)
-                        print(f"Image {imgName} downloaded successfully.")
+                    if os.path.exists(f"{imgPath}/{imgName}"):
+                        print(f"Image {imgName} already downloaded.")
+                    else:
+                        imgData = requests.get(baseLink + item['src']).content
+                        with open(os.path.join("..", "frontend", "images", imgName), 'wb') as f:
+                            f.write(imgData)
+                            print(f"Image {imgName} downloaded successfully.")
             item = item.findNext("h1")
 
     return movies
