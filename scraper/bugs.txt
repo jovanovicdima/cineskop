@@ -1,5 +1,0 @@
-1. PROJECTIONS - TREBA SE SREDITI CINEMAID 3 LINK #
-2. MOVIELINKS - VILINGRAD //
-3. proveriti ticket stats
-4. proveriti commit
-5. srediti vilin grad stats postoji slika downloads folder - odradjeno

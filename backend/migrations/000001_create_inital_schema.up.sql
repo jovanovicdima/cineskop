@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS movies
     countryoforigin text NOT NULL,
     director text NOT NULL,
     "cast" text NOT NULL,
+    trailerlink text NOT NULL,
     CONSTRAINT "movies_pkey" PRIMARY KEY (id),
     CONSTRAINT "originaltitle_ukey" UNIQUE (originaltitle)
 );

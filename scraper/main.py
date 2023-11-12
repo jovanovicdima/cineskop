@@ -7,11 +7,11 @@ def writeMoviesToDatabase(movies, cinemaName):
     for item in movies:
         try:
             # movies table
-            query = "INSERT INTO movies (title, originaltitle, runningtime, genre, countryoforigin, director, \"cast\") VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT (originaltitle) DO UPDATE SET (runningtime) = ROW(EXCLUDED.runningtime)"
-            params = (item.title, item.originalTitle, int(item.runningTime), item.genre, item.countryOfOrigin, item.director, item.cast)
+            query = "INSERT INTO movies (title, originaltitle, runningtime, genre, countryoforigin, director, \"cast\", trailerlink) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT (originaltitle) DO UPDATE SET (runningtime) = ROW(EXCLUDED.runningtime)"
+            params = (item.title, item.originalTitle, int(item.runningTime), item.genre, item.countryOfOrigin, item.director, item.cast, item.trailerLink)
             cursor.execute(query, params)
             connection.commit()
-            print(f"{item.title} | {item.originalTitle} | {item.runningTime} | {item.countryOfOrigin} | {item.director} | {item.cast} | {item.href} | {item.genre}")
+            print(f"{item.title} | {item.originalTitle} | {item.runningTime} | {item.countryOfOrigin} | {item.director} | {item.cast} | {item.href} | {item.genre} | {item.trailerLink}")
         except Exception as error:
             print(f"{item.title} - movies table error: {error}")
 
