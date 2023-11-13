@@ -64,8 +64,19 @@ def getMovie(movieURL, pageInstance):
         projectionType = item.find("p", class_ = "mode-desc").text.strip()
         if projectionType == "":
             projectionType = "Digital 2D"
+        
+        price = 0
+        try:
+            pageInstance.goto(ticketLink)
+            priceClicker = pageInstance.locator(f'img[title="Slobodno"]').nth(0)
+            priceClicker.click()
+            request = pageInstance.inner_html("span.uk-vertical-align-middle.priceunit", timeout=15000)
+            html = str(BeautifulSoup(request, 'html.parser'))
+            price = int(html[html.index("R") + 4:html.index(",")])
+        except Exception as error:
+            print(f"cineplexx price error: {error}")
 
-        movie.tickets.append(TicketInfo(projectionTime, projectionType, auditorium, ticketStatus, ticketLink))
+        movie.tickets.append(TicketInfo(projectionTime, projectionType, auditorium, ticketStatus, price, ticketLink))
 
         item = item.findNext(class_ = "span3")
         
@@ -76,14 +87,14 @@ def cineplexx():
     if not os.path.exists("../frontend/images"):
         os.makedirs("../frontend/images")
     with sync_playwright() as playwright:
-        browser = playwright.firefox.launch(headless=True, slow_mo=300)
+        browser = playwright.firefox.launch(headless=True, slow_mo=1000)
         page = browser.new_page()
 
         for i in range(12):
             page.goto("https://www.cineplexx.rs/filmovi/repertoar/")
             page.locator('select.isset[name=centerId]').select_option("615")
             try:
-                page.locator('select.isset[name="date"]').select_option(index=i, timeout=300) # timeout is set to >=300ms so ticketStatus can be determined
+                page.locator('select[name="date"]').select_option(index=i + 1, timeout=300) # timeout is set to >=300ms so ticketStatus can be determined
             except:
                 continue
             request = page.inner_html("div.container", timeout=5000)

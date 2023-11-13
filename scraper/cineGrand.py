@@ -1,5 +1,6 @@
 import requests
 import os
+import json
 from movie import Movie, TicketInfo
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -44,15 +45,20 @@ def getMovie(movieURL):
         projectionType = item.find("span", class_ = "value").text
 
         auditorium = "unknown"
+        price = 0
         try:
-            auditoriumRequest = BeautifulSoup(requests.get(ticketLink).content, "html.parser")
-            auditorium = auditoriumRequest.find("h3", class_ = "projectionHall").text
+            ticketLinkRequest = BeautifulSoup(requests.get(ticketLink).content, "html.parser")
+            auditorium = ticketLinkRequest.find("h3", class_ = "projectionHall").text
+            prices = json.loads(ticketLinkRequest.find("input", id="hidden-seatticketPrices")["value"])
+            for info in prices:
+                if(info["SystemCode"] == "NORMAL"):
+                    price = int(info["Price"])
+                    break
         except:
             status = 4 # no tickets left
         
         item = item.findNext("span", class_ = "filmscreeningsTime")
-
-        movie.tickets.append(TicketInfo(projectionTime, projectionType, auditorium, status, ticketLink))
+        movie.tickets.append(TicketInfo(projectionTime, projectionType, auditorium, status, price, ticketLink))
 
     return movie
     

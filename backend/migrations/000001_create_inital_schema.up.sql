@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS projections
     projectiontype text NOT NULL,
     link text NOT NULL,
     status smallint NOT NULL,
+    price smallint NOT NULL,
     CONSTRAINT "projections_pkey" PRIMARY KEY (id),
     CONSTRAINT "projection_ukey" UNIQUE (movieid, cinemaid, "time"),
     CONSTRAINT "cinemaid" FOREIGN KEY (cinemaid)

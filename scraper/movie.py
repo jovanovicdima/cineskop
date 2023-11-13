@@ -12,11 +12,12 @@ class Movie:
         self.trailerLink = ""
 
 class TicketInfo:
-    def __init__(self, projectionTime, projectionType, auditorium, status, ticketLink):
+    def __init__(self, projectionTime, projectionType, auditorium, status, price, ticketLink):
         self.projectionTime = projectionTime
         self.projectionType = projectionType
         self.auditorium = auditorium
         self.link = ticketLink
+        self.price = price
         self.status = status
         # status 0 - purchasable online, reservation available
         # status 1 - purchasable online, reservation not available

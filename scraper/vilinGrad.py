@@ -47,15 +47,17 @@ def getMovie(movieURL):
         projectionType = item.find("span", class_ = "value").text
 
         auditorium = "unknown"
+        price = 0
         try:
-            auditoriumRequest = BeautifulSoup(requests.get("http://test.8bit.rs/Projection/FilmProjectionHall?projectionID=" + ticketLink[ticketLink.find("=") + 1:]).content, "html.parser")
-            auditorium = auditoriumRequest.find("h3", class_ = "projectionHall").text
+            ticketLinkRequest = BeautifulSoup(requests.get("http://test.8bit.rs/Projection/FilmProjectionHall?projectionID=" + ticketLink[ticketLink.find("=") + 1:]).content, "html.parser")
+            price = int(float(ticketLinkRequest.find("input", id="hidden-ticketPrice")["value"]))
+            auditorium = ticketLinkRequest.find("h3", class_ = "projectionHall").text
         except:
             status = 4 # no tickets left
         
         item = item.findNext("span", class_ = "filmscreeningsTime")
 
-        movie.tickets.append(TicketInfo(projectionTime, projectionType, auditorium, status, ticketLink))
+        movie.tickets.append(TicketInfo(projectionTime, projectionType, auditorium, status, price, ticketLink))
 
     return movie
     

@@ -31,20 +31,20 @@ def writeMoviesToDatabase(movies, cinemaName):
         for ticket in item.tickets:
             try:
                 # projections table
-                query = "INSERT INTO projections (movieid, cinemaid, time, auditorium, projectiontype, link, status) VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT (movieid, cinemaid, time) DO NOTHING"
-                params = (movieID, cinemaID, ticket.projectionTime, ticket.auditorium, ticket.projectionType, ticket.link, ticket.status)
+                query = "INSERT INTO projections (movieid, cinemaid, time, auditorium, projectiontype, link, status, price) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT (movieid, cinemaid, time) DO UPDATE SET (price) = ROW(EXCLUDED.price)"
+                params = (movieID, cinemaID, ticket.projectionTime, ticket.auditorium, ticket.projectionType, ticket.link, ticket.status, ticket.price)
                 cursor.execute(query, params)
                 connection.commit()
-                print(f"{ticket.projectionTime} | {ticket.projectionType} | {ticket.auditorium} | {ticket.link} | {ticket.status}")
+                print(f"{ticket.projectionTime} | {ticket.price} RSD | {ticket.projectionType} | {ticket.auditorium} | {ticket.link} | {ticket.status}")
             except Exception as error:
                 print(f"{ticket.projectionTime} - projections table error: {error}")
 
 try:
     connection = psycopg.connect(
         host = "localhost",
-        dbname = "dima",
-        user = "dima",
-        password = "dima",
+        dbname = "",
+        user = "",
+        password = "",
         port = "5432")
     
     cursor = connection.cursor()
