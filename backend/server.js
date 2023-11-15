@@ -19,7 +19,7 @@ client.connect();
 
 app.get('/', async (req, res) => {
     // const version = await client.query("SELECT version()");
-    const items = await client.query("SELECT * FROM movies")
+    const items = await client.query("SELECT id, title, originaltitle, genre FROM movies")
     res.json(items.rows);
 });
 

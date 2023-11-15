@@ -1,0 +1,148 @@
+body {
+	max-width: 800px;
+	margin: auto;
+	font-family: Poppins;
+	color: #525252;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+}
+
+@media only screen and (max-width: 850px) {
+  body {
+	  max-width: 600px;
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  body {
+	  max-width: 400px;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  body {
+	  max-width: 200px;
+  }
+}
+
+header {
+	width: 100%;
+	display: inline-flex;
+	justify-content: space-between;
+	margin-top: 24px;
+}
+
+h1 {
+	margin: 0px;
+}
+
+span {
+	color: #525252;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+}
+
+a {
+	text-decoration: none;
+}
+
+main {
+	margin-top: 48px;
+}
+
+p {
+	margin: 0;
+}
+
+.button {
+	position: relative;
+	display: inline-flex;
+	padding: 8px 16px;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	border-radius: 8px;
+}
+
+.buttons {
+	display: inline-flex;
+	align-items: flex-start;
+	gap: 24px;
+}
+
+.smallButton {
+	position: relative;
+	display: inline-flex;
+	padding: 4px 8px;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	border-radius: 6px;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+}
+
+.defaultButton {
+	background: #EBEBEB;
+	color: #525252;
+}
+
+.accentButton {
+	background: #B2FFD8;
+	color: #25B26B;
+}
+
+.genres {
+	margin-top: 48px;
+	margin-bottom: 24px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.genre {
+	cursor: pointer;
+	user-select: none;
+}
+
+
+.movies {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+	gap: 16px;
+}
+
+.movie {
+	margin-bottom: 24px;
+}
+
+.image {
+	width: auto;
+	height: 275px;  /* height is width * 1.46 */
+	background: url(images/f.jpeg);
+	background-size: 100% 100%;
+}
+
+.tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin-bottom: 16px;
+
+}
+
+.name {
+	color: #070707;
+	font-family: Poppins;
+	font-size: 18px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+}
