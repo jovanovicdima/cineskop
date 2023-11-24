@@ -10,3 +10,7 @@ coverage
 
 # Benchmarking
 benchmarks/graphs
+
+# PostgreSQL
+pgadmin
+database
