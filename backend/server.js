@@ -19,7 +19,7 @@ client.connect();
 
 app.get('/', async (req, res) => {
     // const version = await client.query("SELECT version()");
-    const items = await client.query("SELECT id, title, originaltitle, genre FROM movies")
+    const items = await client.query("SELECT distinct movies.id, movies.title, movies.originaltitle, movies.genre FROM movies inner join projections on movies.id = projections.movieid where projections.time > NOW()")
     res.json(items.rows);
 });
 
