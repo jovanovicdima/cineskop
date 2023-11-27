@@ -45,6 +45,8 @@ async function getMovies() {
 			allTags.add(movieList[i].genre[j]);
 		}
 	}
+	movieList.sort((a, b) => {return a.id - b.id});
+	
 	setGenres()
 	printMovies();
 }
@@ -64,7 +66,8 @@ function printMovies() {
 			if(hasTag == false) continue;
 		}
 
-		const movie = document.createElement("div");
+		const movie = document.createElement("a");
+		movie.href = `./movie.html?id=${movieList[i].id}`;
 
 		const image = document.createElement("div");
 		
