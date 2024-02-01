@@ -8,7 +8,7 @@ body {
 	color: #525252;
 	font-size: 20px;
 	font-style: normal;
-	font-weight: 500;
+	font-weight: 700;
 	line-height: normal;
 	display: flex;
 	justify-content: center;
@@ -25,13 +25,7 @@ body {
 
 @media only screen and (max-width: 620px) {
 	body {
-		max-width: 400px;
-	}
-}
-
-@media only screen and (max-width: 420px) {
-	body {
-		max-width: 100%;
+		width: 100%;
 	}
 }
 
@@ -45,6 +39,7 @@ header {
 
 h1 {
 	margin: 0px;
+	color: black;
 }
 
 span {
@@ -60,8 +55,14 @@ a {
 }
 
 main {
-	margin-top: 48px;
+	margin-top: 64px;
 	width: 100%;
+}
+
+@media only screen and (max-width: 620px) {
+	main {
+		margin-top: 32px;
+	}	
 }
 
 p {
@@ -75,6 +76,8 @@ p {
 	align-items: center;
 	gap: 8px;
 	border-radius: 8px;
+	font-size: 16px;
+	cursor: pointer;
 }
 
 .buttons {
@@ -85,29 +88,21 @@ p {
 	font-size: 16px;
 }
 
-@media only screen and (max-width: 420px) {
+@media only screen and (max-width: 450px) {
 	.buttons {
-		font-size: 0px;
 		gap: 4px;
 	}
 
-	.button {
-		gap: 0px;
-	}	
+	.buttons a p {
+		display: none;
+	}
 }
 
 .smallButton {
-	position: relative;
-	display: inline-flex;
 	padding: 4px 8px;
-	justify-content: center;
-	align-items: center;
-	gap: 10px;
 	border-radius: 6px;
 	font-size: 14px;
-	font-style: normal;
-	font-weight: 700;
-	line-height: normal;
+	text-align: center;
 }
 
 .defaultButton {
@@ -128,6 +123,30 @@ p {
 	gap: 16px;
 }
 
+.phoneGenres {
+	display: none;
+}
+
+@media only screen and (max-width: 620px) {
+	.genres {
+		display: none;
+	}
+	.phoneGenres {
+		display: flex;
+		margin-top: 32px;
+		margin-bottom: 24px;
+		gap: 8px;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+	h1 {
+		text-align: center;
+	}
+	p {
+		text-align: center;
+	}
+}
+
 .genre {
 	cursor: pointer;
 	user-select: none;
@@ -137,15 +156,14 @@ p {
 .movies {
 	width: 100%;
 	gap: 16px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
 }
 
-@media only screen and (max-width: 420px) {
+@media only screen and (max-width: 620px) {
 	.movies {
-		grid-template-columns: 185px;
 		justify-content: center;
-	}
-	.genres {
-		justify-content: center;
+		grid-template-columns: repeat(2, minmax(130px, 250px));
 	}
 }
 
@@ -154,10 +172,10 @@ p {
 }
 
 .image {
-	width: auto;
-	height: 275px;  /* height is width * 1.46 */
-	background: url(images/f.jpeg);
+	width: 100%;
+	padding-bottom: 146%; /* height is width * 1.46 */
 	background-size: 100% 100%;
+	border-radius: 3%;
 }
 
 .tags {
@@ -165,14 +183,167 @@ p {
 	flex-wrap: wrap;
 	gap: 4px;
 	margin-bottom: 16px;
+}
 
+
+@media only screen and (max-width: 620px) {
+	.tags {
+		justify-content: center;
+	}
 }
 
 .name {
 	color: #070707;
+	margin-top: 8px;
+	margin-bottom: 4px;
+	font-size: 20px;
+}
+
+@media only screen and (max-width: 620px) {
+	.name {
+		text-align: center;
+	}
+}
+
+.tickets {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.ticket {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.description {
+	display: flex;	
+	flex-wrap: wrap;
+}
+
+@media only screen and (max-width: 620px) {
+	.description {
+		justify-content: center;
+	}
+}
+
+.movieImage {
+	width: 188px;
+	height: 275px;  /* height is width * 1.46 */
+}
+
+.info {
+	width: auto;
+	margin: 8px 32px;
+}
+
+.stats {
+	margin-top: 32px;
+}
+
+.stat {
+	display: flex;
+	gap: 8px;
+	align-items: baseline;
+	margin-bottom: 4px;
+}
+
+.synopsis {
+	margin-top: 48px;
+	text-align: left;
+}
+
+@media only screen and (max-width: 620px) {
+	.synopsis {
+		text-align: justify;
+	}
+}
+
+.trailer {
+	position: relative;
+	overflow: hidden;
+	width: 100%;	
+	padding-top: 56.25%;
+	margin-top: 48px;
+}
+
+iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.repertoar {
+	margin: 48px 0px;
+}
+
+.dates {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	color: #525252;
+	margin: 16px 0px 48px 0px;
+}
+
+.projections {
+	margin-top: 16px;
+}
+
+.projection {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 8px 16px;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	border-radius: 8px;
+	font-size: 14px;
+	margin-bottom: 8px;
+}
+
+.cinema {
+	text-align: center;
+}
+
+@media only screen and (max-width: 350px) {
+	.projection {
+		display: grid;
+		grid-template-columns: 0.5fr 3fr;
+	}
+
+	.cinema {
+		order: 3;
+		grid-column: span 2;
+		justify-self: left;
+		text-align: start;
+	}
+
+	div a p {
+		font-size: 12px;
+		text-align: left;
+	}
+}
+
+.movieName {
+	color: #525252;
 	font-family: Poppins;
-	font-size: 18px;
+	font-size: 16px;
 	font-style: normal;
-	font-weight: 700;
+	font-weight: 600;
+	line-height: normal;	
+}
+
+.movieAuditorium {
+	color: #525252;
+	font-family: Poppins;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 600;
 	line-height: normal;
 }

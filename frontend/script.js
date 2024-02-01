@@ -1,5 +1,3 @@
-console.log("hello world");
-
 const allTags = new Set();
 const selectedTags = new Set();
 let movieList;
@@ -20,25 +18,30 @@ function selectTag() {
 
 function setGenres() {
 	const genres = document.getElementById("genres");
+	const phoneGenres = document.getElementById("phoneGenres");
 	genres.innerHTML = "";
+	phoneGenres.innerHTML = "";
 	allTags.forEach(element => {
 		const tag = document.createElement("div");
-		tag.classList.add("button");
 		tag.classList.add("defaultButton");
 		tag.classList.add("genre");
 		tag.innerText = element;
 		tag.onclick = selectTag;
-		genres.appendChild(tag);
+		let copy = tag.cloneNode(true);
+		copy.classList.add("button");
+		copy.onclick = selectTag;
+		genres.appendChild(copy);
+		tag.classList.add("smallButton");
+		phoneGenres.appendChild(tag);
 	});
 }
 
 async function getMovies() {
-	const items = await fetch("http://localhost:3000");
+	const items = await fetch("http://192.168.0.51:3000");
 	movieList = await items.json();
 	console.log(movieList)
 	for(let i = 0; i < movieList.length; i++) {
-		movieList[i].originaltitle = movieList[i].originaltitle.replaceAll(" ","\\ ");
-		movieList[i].originaltitle = movieList[i].originaltitle.replaceAll("'","\\'");
+		movieList[i].originaltitle = movieList[i].originaltitle.replaceAll(/[^a-zA-Z0-9]/g, '\\$&');
 		movieList[i].genre = movieList[i].genre.split(", ")
 		for(let j = 0; j < movieList[i].genre.length; j++) {
 			movieList[i].genre[j] = movieList[i].genre[j].charAt(0).toUpperCase() + movieList[i].genre[j].slice(1);
