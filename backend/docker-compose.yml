@@ -22,5 +22,13 @@ services:
     volumes:
        - ./pgadmin:/var/lib/pgadmin
     ports:
-      - "8080:80"
+      - "3001:80"
+    restart: unless-stopped
+  
+  frontend:
+    image: nginx
+    volumes:
+    - ./../frontend:/usr/share/nginx/html
+    ports:
+    - "8080:80"
     restart: unless-stopped
