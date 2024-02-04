@@ -68,9 +68,24 @@ def getMovie(movieURL, pageInstance):
         price = 0
         try:
             pageInstance.goto(ticketLink)
-            priceClicker = pageInstance.locator(f'img[title="Slobodno"]').nth(0)
-            priceClicker.click()
-            request = pageInstance.inner_html("span.uk-vertical-align-middle.priceunit", timeout=15000)
+            pageInstance.wait_for_load_state('load');
+
+            retryCount = 0
+            maxRetries = 3
+            while retryCount < maxRetries:
+                try:
+                    priceClicker = pageInstance.locator(f'img[title="Slobodno"]').nth(0)
+                    priceClicker.click()
+                    request = pageInstance.inner_html("span.uk-vertical-align-middle.priceunit", timeout=3000)
+                    # Attempt to find the selector
+                    if priceClicker is not None:
+                        # Element found, break out of the loop
+                        break
+                except:
+                    # Selector not found, wait and retry
+                    retryCount += 1
+                    print(f"Selector not found. Retrying {retryCount}/{maxRetries}...")
+
             html = str(BeautifulSoup(request, 'html.parser'))
             price = int(html[html.index("R") + 4:html.index(",")])
         except Exception as error:
