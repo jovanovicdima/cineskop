@@ -69,3 +69,5 @@ INSERT INTO cinemas(name, link)	VALUES
     ('CineGrand', 'http://nis.cinegrand-mcf.rs/'),
     ('Vilingrad', 'http://vilingrad.rs/') 
     ON CONFLICT (name) DO NOTHING;
+
+SET timezone TO 'Europe/Belgrade';
