@@ -54,7 +54,7 @@ function showMovie() {
 	}
 
 	const synopsis = document.getElementById("synopsis");
-	// synopsis.innerHTML = movie.synopsis;
+	synopsis.innerHTML = movie.synopsis;
 	
 	const trailer = document.getElementById("trailer");
 	if(movie.trailerlink != "") {

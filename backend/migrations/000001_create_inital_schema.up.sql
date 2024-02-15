@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS movies
     title text NOT NULL,
     originaltitle text NOT NULL,
     runningtime smallint DEFAULT 0,
+    synopsis text NOT NULL,
     genre text NOT NULL,
     countryoforigin text NOT NULL,
     director text NOT NULL,

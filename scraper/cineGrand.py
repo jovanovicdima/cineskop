@@ -26,6 +26,12 @@ def getMovie(movieURL):
     movie.genre = item.text[item.text.find(":") + 1:].strip()
     movie.trailerLink = html.find("iframe")["src"]
 
+    item = html.find("div", class_ = "descriptionFilm")
+    item = item.find_all("p")
+    for x in item:
+        movie.synopsis += x.text + "\n"
+    movie.synopsis = movie.synopsis.rstrip("\n")
+
     item = html.find("span", class_ = "filmscreeningsTime")
     while item != None:
         status = 3

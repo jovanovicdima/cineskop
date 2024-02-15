@@ -37,6 +37,12 @@ def getMovie(movieURL, pageInstance):
             f.write(imgData)
             print(f"Image {imgName} downloaded successfully.")
 
+    item = item.findNext("div", class_ = "two-columns")
+    synopsis = item.find_all("p")
+    for x in synopsis:
+        movie.synopsis += x.text + "\n"
+    movie.synopsis = movie.synopsis.rstrip("\n")
+
     item = item.findNext("div", class_ = "span9")
     if item == None: return [] # no projections
 

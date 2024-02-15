@@ -3,6 +3,7 @@ class Movie:
         self.title = title
         self.originalTitle = ""
         self.runningTime = ""
+        self.synopsis = ""
         self.countryOfOrigin = ""
         self.director = ""
         self.cast = ""
