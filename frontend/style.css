@@ -253,6 +253,10 @@ p {
 	margin-bottom: 4px;
 }
 
+.stat svg {
+  min-width: 30px;
+}
+
 .synopsis {
 	margin-top: 48px;
 	text-align: left;

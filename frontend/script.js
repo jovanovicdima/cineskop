@@ -37,7 +37,7 @@ function setGenres() {
 }
 
 async function getMovies() {
-	const items = await fetch("http://192.168.0.51:3000");
+	const items = await fetch("http://localhost:3000");
 	movieList = await items.json();
 	console.log(movieList)
 	for(let i = 0; i < movieList.length; i++) {

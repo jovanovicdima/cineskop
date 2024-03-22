@@ -4,14 +4,15 @@ const dates = new Set();
 let movie;
 
 async function getMovie() {
-	const items = await fetch(`http://192.168.0.51:3000/movie/${id}`);
+		const items = await fetch(`http://localhost:3000/movie/${id}`);
 	movie = (await items.json())[0];
+  console.log(movie);
 	movie.genre = movie.genre.split(", ");
 	for(let i = 0; i < movie.genre.length; i++) {
 		movie.genre[i] = movie.genre[i].charAt(0).toUpperCase() + movie.genre[i].slice(1);
 	}
 
-	movie.projections = await fetch(`http://192.168.0.51:3000/projection/${id}`).then(x => x.json());
+	movie.projections = await fetch(`http://localhost:3000/projection/${id}`).then(x => x.json());
 	for(let i = 0; i < movie.projections.length; i++) {
 		movie.projections[i].time = new Date(movie.projections[i].time);
 	}
@@ -43,6 +44,13 @@ function showMovie() {
 
 	const origin = document.getElementById("origin");
 	origin.innerHTML = movie.countryoforigin;
+
+	const cast = document.getElementById("cast");
+  if(movie.cast != "") {
+    cast.innerHTML = movie.cast;
+  } else {
+    cast.parentNode.innerHTML = "";
+  }
 
 	const genres = document.getElementById("genres");
 	for(let genre of movie.genre) {
@@ -115,7 +123,7 @@ function showProjections(targetDate) {
 			const cinema = document.createElement("div");
 			cinema.classList.add("cinema");
 			const movieName = document.createElement("p");
-			movieName.classList.add("movieName"); // TODO - NEED TO CHANGE
+			movieName.classList.add("movieName"); // TODO: - NEED TO CHANGE
 			movieName.innerHTML = item.name;
 			cinema.appendChild(movieName);
 			const movieAuditorium = document.createElement("p");
