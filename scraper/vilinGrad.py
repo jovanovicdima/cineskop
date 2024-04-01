@@ -55,7 +55,7 @@ def getMovie(movieURL):
         auditorium = "unknown"
         price = 0
         try:
-            ticketLinkRequest = BeautifulSoup(requests.get("http://test.8bit.rs/Projection/FilmProjectionHall?projectionID=" + ticketLink[ticketLink.find("=") + 1:]).content, "html.parser")
+            ticketLinkRequest = BeautifulSoup(requests.get("http://vgrez.gart.rs/Projection/FilmProjectionHall?projectionID=" + ticketLink[ticketLink.find("=") + 1:]).content, "html.parser")
             price = int(float(ticketLinkRequest.find("input", id="hidden-ticketPrice")["value"]))
             auditorium = ticketLinkRequest.find("h3", class_ = "projectionHall").text
         except:
