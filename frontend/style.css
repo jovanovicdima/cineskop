@@ -6,7 +6,6 @@ body {
 	width: 800px;
 	font-family: Poppins;
 	color: #525252;
-	font-size: 20px;
 	font-style: normal;
 	font-weight: 700;
 	line-height: normal;
@@ -16,6 +15,9 @@ body {
 	body {
 		max-width: 600px;
 	}
+  .filter {
+    width: 90%;
+  }
 }
 
 @media only screen and (max-width: 620px) {
@@ -32,8 +34,11 @@ header {
 }
 
 h1 {
-	margin: 0px;
-	color: black;
+	margin: 0;
+}
+
+h2 {
+	margin: 0;
 }
 
 span {
@@ -49,7 +54,7 @@ a {
 }
 
 main {
-	margin-top: 64px;
+  margin-top: 64px;
 	width: 100%;
 }
 
@@ -60,7 +65,16 @@ main {
 }
 
 p {
+  font-size: 20px;
 	margin: 0;
+}
+
+.small-text {
+  font-size: 14px;
+}
+
+.tiny-text {
+  font-size: 12px;
 }
 
 .button {
@@ -68,10 +82,12 @@ p {
 	padding: 8px 16px;
 	justify-content: center;
 	align-items: center;
+  text-align: center;
 	gap: 8px;
 	border-radius: 8px;
 	font-size: 16px;
 	cursor: pointer;
+  user-select: none;
 }
 
 .buttons {
@@ -97,6 +113,7 @@ p {
 	border-radius: 6px;
 	font-size: 14px;
 	text-align: center;
+  user-select: none;
 }
 
 .defaultButton {
@@ -109,12 +126,20 @@ p {
 	color: #25B26B;
 }
 
+.title {
+  margin: 32px 0px;
+}
+
+@media only screen and (max-width: 620px) {
+  .title {
+    text-align: center;
+  }
+}
+
 .genres {
-	margin-top: 48px;
-	margin-bottom: 24px;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 16px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+	gap: 10px;
 }
 
 .phoneGenres {
@@ -126,19 +151,15 @@ p {
 		display: none;
 	}
 	.phoneGenres {
-		display: flex;
-		margin-top: 32px;
-		margin-bottom: 24px;
-		gap: 8px;
-		flex-wrap: wrap;
-		justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
 	}
-	h1 {
-		text-align: center;
-	}
-	p {
-		text-align: center;
-	}
+  .smallButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .genre {
@@ -146,12 +167,12 @@ p {
 	user-select: none;
 }
 
-
 .movies {
 	width: 100%;
 	gap: 16px;
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  margin: 16px 0px;
 }
 
 @media only screen and (max-width: 620px) {
@@ -231,9 +252,6 @@ p {
 		justify-self: center;
 		padding-bottom: 101%;
 	}
-	h1 {
-		font-size: 8vw;
-	}
 }
 
 .info {
@@ -258,13 +276,13 @@ p {
 }
 
 .synopsis {
-	margin-top: 48px;
-	text-align: left;
+	margin: 48px 0px;
 }
 
 @media only screen and (max-width: 620px) {
 	.synopsis {
 		text-align: justify;
+    margin: 32px 16px;
 	}
 }
 
@@ -273,8 +291,7 @@ p {
 	overflow: hidden;
 	width: 100%;	
 	padding-top: 56.25%;
-	margin-top: 48px;
-}
+  }
 
 iframe {
   position: absolute;
@@ -354,4 +371,120 @@ iframe {
 	font-style: normal;
 	font-weight: 600;
 	line-height: normal;
+}
+
+.space-between {
+  display: flex;
+  justify-content: space-between;
+	align-items: center;
+}
+
+.filter {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  background-color: white;
+  border-radius: 8px;
+  padding: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.filterButton {
+  display: flex;
+  margin: 12px 0px;
+}
+
+@media only screen and (max-width: 620px) {
+  .filter {
+    height: fit-content;
+    width: 90%;
+    gap: 12px;
+  }
+  .filterButton {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: minmax(150px, 516px);
+  }
+}
+
+@media screen and (max-height: 600px) and (orientation: landscape) {
+  .filter {
+    position: absolute;
+    top: 100%;
+  }
+}
+
+.dim {
+  position: fixed;
+  background-color: black;
+  opacity: 50%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+.in-line {
+  display: flex;
+  gap: 8px;
+}
+
+.black {
+  color: black;
+}
+
+input {
+  font-family: Poppins;
+  color: #525252;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  width: fit-content;
+}
+
+.filter-gap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+svg {
+  text-align: center;
+}
+
+@media only screen and (max-width: 350px) {
+  p {
+    font-size: 5.5vw;
+  }
+  .small-text {
+    font-size: 4vw;
+  }
+  .smallButton {
+    font-size: 4vw;
+  }
+	h1 {
+		font-size: 8vw;
+	}
+  h2 {
+    font-size: 7vw;
+  }
+  input {
+    font-size: 4vw;
+  }
+  svg {
+    width: 7vw;
+  }
 }

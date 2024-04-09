@@ -17,9 +17,14 @@ const client = new database.Client({
 
 client.connect();
 
-app.get('/', async (req, res) => {
+app.get('/', async (_, res) => {
     // const version = await client.query("SELECT version()");
-    const items = await client.query("SELECT distinct movies.id, movies.title, movies.originaltitle, movies.genre FROM movies inner join projections on movies.id = projections.movieid where projections.time > NOW()")
+  const items = await client.query(`SELECT distinct movies.id, movies.title, movies.originaltitle, movies.genre,
+    ( SELECT ARRAY_AGG(projections.time)
+      FROM projections 
+      WHERE projections.movieid = movies.id 
+      AND projections.time > NOW()
+    ) AS projectiontimes FROM movies inner join projections on movies.id = projections.movieid where projections.time > NOW()`)
     res.json(items.rows);
 });
 

@@ -4,7 +4,7 @@ const dates = new Set();
 let movie;
 
 async function getMovie() {
-		const items = await fetch(`http://localhost:3000/movie/${id}`);
+  const items = await fetch(`http://localhost:3000/movie/${id}`);
 	movie = (await items.json())[0];
   console.log(movie);
 	movie.genre = movie.genre.split(", ");
@@ -16,9 +16,6 @@ async function getMovie() {
 	for(let i = 0; i < movie.projections.length; i++) {
 		movie.projections[i].time = new Date(movie.projections[i].time);
 	}
-
-	console.log(movie.originaltitle);
-
 }
 
 function showMovie() {
