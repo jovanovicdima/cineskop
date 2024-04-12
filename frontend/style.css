@@ -397,6 +397,7 @@ iframe {
 .filterButton {
   display: flex;
   margin: 12px 0px;
+  width: fit-content;
 }
 
 @media only screen and (max-width: 620px) {
