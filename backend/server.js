@@ -8,7 +8,7 @@ app.use(cors());
 const database = require('pg');
 
 const client = new database.Client({
-    host: "localhost",
+    host: process.env.DB_HOST,
     user: "",
     port: 5432,
     password: "",

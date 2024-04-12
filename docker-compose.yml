@@ -24,6 +24,23 @@ services:
     ports:
       - "3001:80"
     restart: unless-stopped
+
+  backend:
+    image: node
+    working_dir: /usr/src/app
+    volumes:
+      - ./backend:/usr/src/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    command: npm run dev
+    environment:
+      - DB_HOST=database
+    restart: always
+    expose:
+      - "3000"
+
   
   frontend:
     image: nginx
