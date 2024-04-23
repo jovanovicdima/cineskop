@@ -37,7 +37,7 @@ services:
     command: npm run dev
     environment:
       - DB_HOST=database
-    restart: always
+    restart: unless-stopped
     expose:
       - "3000"
 
