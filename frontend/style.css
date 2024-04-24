@@ -410,6 +410,7 @@ iframe {
     display: grid;
     justify-content: center;
     grid-template-columns: minmax(150px, 516px);
+    margin: 12px auto;
   }
 }
 
