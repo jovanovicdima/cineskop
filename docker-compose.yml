@@ -4,8 +4,8 @@ services:
   database:
     image: postgres
     environment:
-      POSTGRES_USER: dima
-      POSTGRES_PASSWORD: dima
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
       PGDATA: /data/postgres
     volumes:
       - ./backend/database:/data/postgres
@@ -16,8 +16,8 @@ services:
   pgadmin:
     image: dpage/pgadmin4:latest
     environment:
-      PGADMIN_DEFAULT_EMAIL: dima@dima.dima
-      PGADMIN_DEFAULT_PASSWORD: dima
+      PGADMIN_DEFAULT_EMAIL: ${PG_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_PASS}
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
       - ./backend/pgadmin:/var/lib/pgadmin
@@ -35,12 +35,13 @@ services:
     depends_on:
       - database
     command: npm run dev
+    env_file:
+      - ./.env
     environment:
       - DB_HOST=database
     restart: unless-stopped
     expose:
       - "3000"
-
   
   frontend:
     image: nginx

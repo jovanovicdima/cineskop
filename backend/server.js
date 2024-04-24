@@ -1,4 +1,5 @@
-const cors = require("cors")
+const cors = require("cors");
+require("dotenv").config();
 
 const express = require('express');
 const app = express();
@@ -9,10 +10,10 @@ const database = require('pg');
 
 const client = new database.Client({
     host: process.env.DB_HOST,
-    user: "",
+    user: process.env.DB_USER,
     port: 5432,
-    password: "",
-    database: ""
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
 });
 
 client.connect();
