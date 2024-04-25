@@ -41,6 +41,10 @@ h2 {
 	margin: 0;
 }
 
+ul {
+  margin: 0;
+}
+
 span {
 	color: #525252;
 	font-size: 14px;
@@ -67,6 +71,10 @@ main {
 p {
   font-size: 20px;
 	margin: 0;
+}
+
+.medium-text {
+  font-size: 16px;
 }
 
 .small-text {
@@ -489,4 +497,10 @@ svg {
   svg {
     width: 7vw;
   }
+}
+
+.about-gap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
